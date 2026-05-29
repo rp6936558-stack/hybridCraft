@@ -1,0 +1,44 @@
+name: Build Forge 1.7.10 Mod
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Unzip project
+        run: |
+          unzip "*.zip" -d project || true
+
+      - name: Find Gradle project
+        run: |
+          if [ -d "project" ]; then
+            cd project
+          fi
+          find . -name "build.gradle"
+
+      - name: Make gradlew executable
+        run: |
+          chmod +x ./gradlew || true
+
+      - name: Build mod
+        run: |
+          ./gradlew build
+
+      - name: Upload mod jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-mod
+          path: build/libs/*.jar
