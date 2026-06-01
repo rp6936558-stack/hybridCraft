@@ -22,7 +22,7 @@ jobs:
         run: chmod +x forge-1.7.10/gradlew
 
       - name: Build mod
-        run: cd forge-1.7.10 && ./gradlew build
+        run: cd forge-1.7.10-mdk && ./gradlew build
 
       - name: Upload mod jar
         uses: actions/upload-artifact@v4
