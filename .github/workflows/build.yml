@@ -1,4 +1,4 @@
-name: Build Mod
+name: Build HybridCraft
 
 on:
   workflow_dispatch:
@@ -8,14 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Unzip project
-        run: unzip HybridCraft.zip
+      - uses: actions/checkout@v4
 
       - name: Show files
-        run: ls -R
+        run: ls -la
+
+      - name: Unzip project
+        run: unzip "*.zip"
+
+      - name: Show unpacked files
+        run: find . -maxdepth 3
 
       - name: Setup Java 8
         uses: actions/setup-java@v4
@@ -24,15 +26,15 @@ jobs:
           java-version: 8
 
       - name: Make gradlew executable
-        run: chmod +x forge-1.7.10-10.13.4.1614-1.7.10-src/gradlew
+        run: chmod +x forge-1.7.10/gradlew
 
-      - name: Build
+      - name: Build mod
         run: |
-          cd forge-1.7.10-10.13.4.1614-1.7.10-src
+          cd forge-1.7.10
           ./gradlew build
 
       - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
           name: HybridCraft
-          path: forge-1.7.10-10.13.4.1614-1.7.10-src/build/libs/*.jar
+          path: forge-1.7.10/build/libs/*.jar
